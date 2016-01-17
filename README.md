@@ -50,6 +50,14 @@ $ sudo bash admin.bash
 
 ## Usage
 
+Start the API:  
+
+```bash
+$ python app.py
+```
+
+Open another SSH tab and run the example commands below:  
+
 ### New user
 
 POST /api/v1.0/user/new -d {"user":[USER_ID],"password":[PASSWORD]}  
