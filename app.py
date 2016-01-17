@@ -116,7 +116,7 @@ def get_stats(user_id):
 def index():
     return "Riak Twitter Clone"
 
-@app.route('/riak-twitter/api/v1.0/user/new', methods=['POST'])
+@app.route('/riak-twitter-clone/api/v1.0/user/new', methods=['POST'])
 def create_user():
 
     bucket_type = 'user'
@@ -130,7 +130,7 @@ def create_user():
 
     return jsonify({'user': user}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/<string:user_id>', methods=['GET'])
 def get_user(user_id):
     
     bucket_type = 'user'
@@ -140,7 +140,7 @@ def get_user(user_id):
 
     return jsonify({'user': fetched.data})
 
-@app.route('/riak-twitter/api/v1.0/user/follow', methods=['POST'])
+@app.route('/riak-twitter-clone/api/v1.0/user/follow', methods=['POST'])
 def follow_user():
 
     # Maintain separate following and followers lists
@@ -166,7 +166,7 @@ def follow_user():
 
     return jsonify({'primary_user_id': request.json['primary_user_id'], 'secondary_user_id': request.json['secondary_user_id']}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/unfollow', methods=['POST'])
+@app.route('/riak-twitter-clone/api/v1.0/user/unfollow', methods=['POST'])
 def unfollow_user():
 
     bucket_type = 'user-set'
@@ -188,33 +188,33 @@ def unfollow_user():
 
     return jsonify({'primary_user_id': request.json['primary_user_id'], 'secondary_user_id': request.json['secondary_user_id']}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/followers/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/followers/<string:user_id>', methods=['GET'])
 def get_followers_api(user_id):
 
     return jsonify({'followers': get_follow(user_id.encode('utf8'), 'followers')}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/following/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/following/<string:user_id>', methods=['GET'])
 def get_following(user_id):
     
     return jsonify({'following': get_follow(user_id.encode('utf8'), 'following')}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/posts/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/posts/<string:user_id>', methods=['GET'])
 def get_posts_api(user_id):
     
     return jsonify({'posts': get_posts(user_id)}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/timeline/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/timeline/<string:user_id>', methods=['GET'])
 def get_timeline_api(user_id):
     
     return jsonify({'timeline': get_timeline(user_id)}), 201
 
-@app.route('/riak-twitter/api/v1.0/user/stats/<string:user_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/user/stats/<string:user_id>', methods=['GET'])
 def get_stats_api(user_id):
 
     user_id = user_id.encode('utf8')
     return jsonify({'stats': get_stats(user_id)}), 201
 
-@app.route('/riak-twitter/api/v1.0/post', methods=['POST'])
+@app.route('/riak-twitter-clone/api/v1.0/post', methods=['POST'])
 def new_post():
 
     bucket_type = 'post'
@@ -238,7 +238,7 @@ def new_post():
 
     return jsonify({'id': key, 'post': post}), 201
 
-@app.route('/riak-twitter/api/v1.0/post/<string:post_id>', methods=['GET'])
+@app.route('/riak-twitter-clone/api/v1.0/post/<string:post_id>', methods=['GET'])
 def get_post(post_id):
     
     bucket_type = 'post'
