@@ -64,9 +64,11 @@ $ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/new -H 
 GET /api/v1.0/user/[USER_ID]  
 
 ```bash
-* curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/rgenova@basho.com
-* curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/user2@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/rgenova@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/user2@basho.com
 ```
+
+(The only property currently stored is the password hash.)
 
 ### Follow user
 
