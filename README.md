@@ -57,6 +57,7 @@ POST /api/v1.0/user/new -d {"user":[USER_ID],"password":[PASSWORD]}
 ```bash
 $ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/new -H "Content-Type: application/json" -d '{"user_id":"rgenova@basho.com","password":"passnow"}'
 $ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/new -H "Content-Type: application/json" -d '{"user_id":"user2@basho.com","password":"passnow"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/new -H "Content-Type: application/json" -d '{"user_id":"user3@basho.com","password":"passnow"}'
 ```
 
 ### Get user
@@ -78,6 +79,8 @@ PUT /api/v1.0/user/follow -d {"primary_user_id":[PRIMARY_USER_ID],"secondary_use
 
 ```bash
 $ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/follow -H "Content-Type: application/json" -d '{"primary_user_id":"rgenova@basho.com","secondary_user_id":"user2@basho.com"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/follow -H "Content-Type: application/json" -d '{"primary_user_id":"rgenova@basho.com","secondary_user_id":"user3@basho.com"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/follow -H "Content-Type: application/json" -d '{"primary_user_id":"user2@basho.com","secondary_user_id":"user3@basho.com"}'
 ```
 
 ### Unfollow user
@@ -87,7 +90,7 @@ PUT /api/v1.0/user/unfollow -d {"primary_user_id":[PRIMARY_USER_ID],"secondary_u
 (primary unfollows secondary)
 
 ```bash
-$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/unfollow -H "Content-Type: application/json" -d '{"primary_user_id":"rgenova@basho.com","secondary_user_id":"user2@basho.com"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/user/unfollow -H "Content-Type: application/json" -d '{"primary_user_id":"user2@basho.com","secondary_user_id":"user3@basho.com"}'
 ```
 
 ### Get followers
@@ -96,6 +99,7 @@ GET /api/v1.0/user/followers/[USER_ID]
 
 ```bash
 $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/followers/user2@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/followers/user3@basho.com
 ```
 
 ### Get following
@@ -111,10 +115,12 @@ $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/following/rgenova@
 POST /api/v1.0/post -d {"user":[USER_ID],"text":[TEXT]}  
 
 ```bash
-$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"rgenova@basho.com","text":"this is a tweet"}'
-$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user2@basho.com","text":"this is another tweet"}'
-$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user2@basho.com","text":"yet another tweet"}'
-$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user2@basho.com","text":"tweet tweet"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"rgenova@basho.com","text":"rgenova post #1"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user2@basho.com","text":"user2 post #1"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user3@basho.com","text":"user3 post #1"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user3@basho.com","text":"user3 post #2"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user3@basho.com","text":"user3 post #3"}'
+$ curl -i -X POST http://localhost:5000/riak-twitter-clone/api/v1.0/post -H "Content-Type: application/json" -d '{"user_id":"user3@basho.com","text":"user3 post #4"}'
 ```
 
 ### Get post
@@ -125,12 +131,16 @@ GET /api/v1.0/post/[POST_ID]
 $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/post/[POST_ID]
 ```
 
+(Substitute a `post_id` returned from a new post command above.)
+
 ### Get user timeline
 
 GET /api/v1.0/user/timeline/[USER_ID]  
 
 ```bash
 $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/timeline/rgenova@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/timeline/user2@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/timeline/user3@basho.com
 ```
 
 ### Get user posts
@@ -138,7 +148,8 @@ $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/timeline/rgenova@b
 GET /api/v1.0/user/posts/[USER_ID]  
 
 ```bash
-$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/posts/user2@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/posts/rgenova@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/posts/user3@basho.com
 ```
 
 ### Get stats
@@ -146,7 +157,9 @@ $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/posts/user2@basho.
 GET /api/v1.0/user/stats/[USER_ID]  
 
 ```bash
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/stats/rgenova@basho.com
 $ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/stats/user2@basho.com
+$ curl http://localhost:5000/riak-twitter-clone/api/v1.0/user/stats/user3@basho.com
 ````
 
 
