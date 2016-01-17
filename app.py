@@ -7,14 +7,7 @@ import hashlib
 import uuid
 from time import gmtime, strftime
 
-# riak
-  # pb: 10017
-  # http: 10018
-# riak-dev-cluster
-  # pb: 11087
-  # http: 11098
-
-client = riak.RiakClient(pb_port=11087)
+client = riak.RiakClient(host="127.0.0.1", pb_port=8087)
 
 app = Flask(__name__)
 
@@ -159,8 +152,6 @@ def follow_user():
     # Add secondary_user_id to 'following' set for primary_user_id
     following = client.bucket_type(bucket_type).bucket('following').get(primary_user_id)
     following.add(secondary_user_id)
-    following.update()
-    update_stats(primary_user_id, 'following')
 
     # Add primary_user_id to 'followers' set for secondary_user_id
     followers = client.bucket_type(bucket_type).bucket('followers').get(secondary_user_id)
