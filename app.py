@@ -57,12 +57,14 @@ def get_posts(user_id):
     user_posts_bucket = client.bucket_type('user-default').bucket('posts')
     user_post_ids = user_posts_bucket.get(user_id)
 
-    posts_bucket = client.bucket_type('post').bucket('posts')
     posts = []
-    for post_id in user_post_ids.data['post_ids']:
-        post = posts_bucket.get(post_id).data
-        del post['user_id']
-        posts.append(post)
+    print user_post_ids
+    if user_post_ids.data is not None:
+        posts_bucket = client.bucket_type('post').bucket('posts')
+        for post_id in user_post_ids.data['post_ids']:
+            post = posts_bucket.get(post_id).data
+            del post['user_id']
+            posts.append(post)
 
     return posts
 
@@ -73,11 +75,12 @@ def get_timeline(user_id):
     timeline_bucket = client.bucket_type('user-default').bucket('timeline')
     timeline_ids = timeline_bucket.get(user_id)
 
-    posts_bucket = client.bucket_type('post').bucket('posts')
     timeline = []
-    for post_id in timeline_ids.data['post_ids']:
-        post = posts_bucket.get(post_id).data
-        timeline.append(post)
+    if timeline_ids.data is not None:
+        posts_bucket = client.bucket_type('post').bucket('posts')
+        for post_id in timeline_ids.data['post_ids']:
+            post = posts_bucket.get(post_id).data
+            timeline.append(post)
 
     return timeline
 
@@ -152,6 +155,8 @@ def follow_user():
     # Add secondary_user_id to 'following' set for primary_user_id
     following = client.bucket_type(bucket_type).bucket('following').get(primary_user_id)
     following.add(secondary_user_id)
+    following.update()
+    update_stats(primary_user_id, 'following')
 
     # Add primary_user_id to 'followers' set for secondary_user_id
     followers = client.bucket_type(bucket_type).bucket('followers').get(secondary_user_id)
@@ -179,7 +184,7 @@ def unfollow_user():
     followers = client.bucket_type(bucket_type).bucket('followers').get(secondary_user_id)
     followers.discard(primary_user_id)
     followers.update()
-    update_stats(secondary_user_id, 'following', False)
+    update_stats(secondary_user_id, 'followers', False)
 
     return jsonify({'primary_user_id': request.json['primary_user_id'], 'secondary_user_id': request.json['secondary_user_id']}), 201
 
@@ -196,7 +201,7 @@ def get_following(user_id):
 @app.route('/riak-twitter/api/v1.0/user/posts/<string:user_id>', methods=['GET'])
 def get_posts_api(user_id):
     
-    return jsonify({'timeline': get_posts(user_id)}), 201
+    return jsonify({'posts': get_posts(user_id)}), 201
 
 @app.route('/riak-twitter/api/v1.0/user/timeline/<string:user_id>', methods=['GET'])
 def get_timeline_api(user_id):

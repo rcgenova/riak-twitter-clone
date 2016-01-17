@@ -1,4 +1,4 @@
-riak-admin bucket-type create user '{"props":{"consistent":true}}'
+riak-admin bucket-type create user
 riak-admin bucket-type activate user
 
 riak-admin bucket-type create user-map '{"props":{"datatype":"map"}}'
